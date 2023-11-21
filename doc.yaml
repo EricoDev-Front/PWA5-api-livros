@@ -1,0 +1,263 @@
+openapi: 3.0.0
+info:
+  title: Sebo de Livros API
+  description: >
+    Bem-vindo à API do Sebo de Livros, uma plataforma online que oferece operações CRUD para livros e usuários.
+    Explore os endpoints abaixo para gerenciar o catálogo de livros, interagir com usuários e realizar transações.
+  version: 1.0.0
+
+paths:
+  /users:
+    post:
+      summary: Cria um novo usuário
+      description: Cria um novo usuário com as informações fornecidas
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome do usuário
+                email:
+                  type: string
+                  description: E-mail do usuário
+                password:
+                  type: string
+                  description: Senha do usuário
+              required:
+                - name
+                - email
+                - password
+      responses:
+        "201":
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              example:
+                id: 1
+                name: "John Doe"
+                email: "john.doe@example.com"
+
+    get:
+      summary: Obtém a lista de usuários
+      description: Retorna a lista de todos os usuários cadastrados
+      tags: [Users]
+      responses:
+        "200":
+          description: Sucesso, retorna a lista de usuários
+          content:
+            application/json:
+              example:
+                - id: 1
+                  name: "John Doe"
+                  email: "john.doe@example.com"
+                - id: 2
+                  name: "Jane Smith"
+                  email: "jane.smith@example.com"
+                # Adicione mais usuários conforme necessário
+
+  /users/{userId}:
+    put:
+      summary: Atualiza as informações de um usuário
+      description: Atualiza as informações de um usuário específico com as informações fornecidas
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID do usuário a ser atualizado
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Novo nome do usuário
+                email:
+                  type: string
+                  description: Novo e-mail do usuário
+                password:
+                  type: string
+                  description: Nova senha do usuário
+              required:
+                - name
+                - email
+                - password
+      responses:
+        "200":
+          description: Usuário atualizado com sucesso
+        "404":
+          description: Usuário não encontrado
+        "400":
+          description: Requisição inválida, verifique os parâmetros enviados
+
+    delete:
+      summary: Remove um usuário
+      description: Remove um usuário específico do sistema
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID do usuário a ser removido
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Usuário removido com sucesso
+        "404":
+          description: Usuário não encontrado
+
+  /books:
+    get:
+      summary: Obtém a lista de livros
+      description: >
+        Retorna a lista de livros disponíveis no catálogo. Você pode filtrar os resultados com parâmetros de consulta opcionais.
+      tags: [Books]
+      parameters:
+        - name: title
+          in: query
+          description: Filtra os livros pelo título
+          schema:
+            type: string
+        - name: author
+          in: query
+          description: Filtra os livros pelo autor
+          schema:
+            type: string
+        - name: owner_id
+          in: query
+          description: Filtra os livros pelo ID do proprietário
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sucesso, retorna a lista de livros
+          content:
+            application/json:
+              example:
+                - id: 1
+                  title: "Nome do Livro 1"
+                  author: "Autor do Livro 1"
+                  owner_id: 1
+                  year: 2022
+                - id: 2
+                  title: "Nome do Livro 2"
+                  author: "Autor do Livro 2"
+                  owner_id: 2
+                  year: 2020
+                # Adicione mais livros conforme necessário
+
+    post:
+      summary: Cria um novo livro
+      description: Cria um novo livro com as informações fornecidas
+      tags: [Books]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Título do livro
+                author:
+                  type: string
+                  description: Autor do livro
+                owner_id:
+                  type: integer
+                  description: ID do proprietário do livro
+                year:
+                  type: integer
+                  description: Ano de publicação do livro
+              required:
+                - title
+                - author
+                - owner_id
+                - year
+      responses:
+        "201":
+          description: Livro criado com sucesso
+          content:
+            application/json:
+              example:
+                id: 3
+                title: "Novo Livro"
+                author: "Novo Autor"
+                owner_id: 1
+                year: 2023
+
+  /books/{bookId}:
+    put:
+      summary: Atualiza as informações de um livro
+      description: Atualiza as informações de um livro específico com as informações fornecidas
+      tags: [Books]
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: ID do livro a ser atualizado
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Novo título do livro
+                author:
+                  type: string
+                  description: Novo autor do livro
+                owner_id:
+                  type: integer
+                  description: Novo ID do proprietário do livro
+                year:
+                  type: integer
+                  description: Novo ano de publicação do livro
+              required:
+                - title
+                - author
+                - owner_id
+                - year
+      responses:
+        "200":
+          description: Livro atualizado com sucesso
+        "404":
+          description: Livro não encontrado
+        "400":
+          description: Requisição inválida, verifique os parâmetros enviados
+
+    delete:
+      summary: Remove um livro
+      description: Remove um livro específico do catálogo
+      tags: [Books]
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: ID do livro a ser removido
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Livro removido com sucesso
+        "404":
+          description: Livro não encontrado
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ERICOVINICIUS333/SeboLivros-api/1.0.0
